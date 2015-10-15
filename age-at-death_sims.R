@@ -60,7 +60,6 @@ ks.sim <- function(n, models,  probs1, probs2, reps=1000) {
 }
 
 #Set up for simulation
-#args: reps, n, labels, models, probs1, probs2
 
 reps <- 1000
 n <- 50
@@ -68,5 +67,13 @@ models <- c("wool", "security")
 probs1 <- wool
 probs2 <- security
 
+# Testing for false negatives [NEED TO CREATE WRAPPER FUNCTION TO RUN THIS WITH INCREMENTALLY
+# INCREASING SAMPLE SIZES AND COLLECT RESULTS]
+# [ALSO NEED TO RUN FOR DIFFERENT PAIRS OF MODELS]
+# nb. very large number of repeats as it took suprisingly many to converge
 x <- ks.sim(30, reps=100000, models=c("wool", "security"), probs1=wool, probs2=security)
+x[[1]]
+
+# Testing for false positives [AS ABOVE]
+x <- ks.sim(30, reps=100000, models=c("wool", "wool"), probs1=wool, probs2=wool)
 x[[1]]
