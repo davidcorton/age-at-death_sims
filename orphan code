@@ -1,0 +1,24 @@
+#Calculate totals per bin
+    totals1 <- sim[, j=list(count.a=length(id)), by=list(rep.no, a)]
+    totals2 <- sim[, j=list(count.b=length(id)), by=list(rep.no, b)]
+    setnames(totals1, "a", "b")
+    totals <- merge(totals1, totals2, by=c("rep.no", "b"), all=TRUE)
+
+    #Tidy up results
+    frame <- data.table(rep.no=rep(1:reps, each=length(labels)), b=rep(1:length(labels), reps), bin=rep(labels, reps))
+    totals <- merge(frame, totals, by=c("rep.no", "b"), all=TRUE)
+    totals[is.na(totals)] <- 0
+
+    #Chi-squared
+    X2.fun <- function(totals) {
+        z <- chisq.test(totals[,c("count.a", "count.b")])
+        z[[3]]
+    }
+    X2 <- data.table(p=daply(totals, .(rep.no), X2.fun))
+    X2 <- X2[!is.na(p),]
+    X2[, sig := 0]
+    X2[p < 0.05, sig := 1]
+    y <- sum(X2$sig)/nrow(X2)
+
+    #Return results
+    c(x,y)
