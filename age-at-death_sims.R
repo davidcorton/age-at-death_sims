@@ -102,6 +102,8 @@ abline(h=5)
 legend("topleft", pch=19, col=c("darkred", "darkblue"), legend=c("K-S", "X2"), bty="n")
 
 
+#ks.test
+
 # Plot Blagotin against 
 blagotin <- data.table(read.csv("Blagotin_to_plot.csv"))
 blagotin[, all.corr := O.C.corrected + Oa.corr]
@@ -141,12 +143,6 @@ sig.wool <- ks.test(b, models[[3]])[[2]]
 sig.meat <- ks.test(b, models[[4]])[[2]]
 
 models[[2]](1:10)
-
-
-
-
-
-
 
 
 #Simulate one sample and compare against all models
